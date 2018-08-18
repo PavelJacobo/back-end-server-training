@@ -1,0 +1,23 @@
+{
+    "name": "backend-server",
+    "version": "1.0.0",
+    "description": "Backend de test1 trining para ondapoligono",
+    "main": "app.js",
+    "scripts": {
+        "start": "nodemon app.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Jacobo González",
+    "license": "ISC",
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "body-parser": "^1.18.3",
+        "express": "^4.16.3",
+        "express-fileupload": "^0.4.0",
+        "google-auth-library": "^1.6.1",
+        "jshint": "^2.9.5",
+        "jsonwebtoken": "^8.3.0",
+        "mongoose": "^5.2.5",
+        "mongoose-unique-validator": "^2.0.1"
+    }
+}
