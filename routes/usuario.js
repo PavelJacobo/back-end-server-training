@@ -13,7 +13,8 @@ app.get('/', (req, res) => {
     var desde = req.query.desde || 0;
     desde = Number(desde);
 
-    Usuario.find({}, 'nombre email img role')
+    Usuario.find({}, 'nombre email img role programas')
+        .populate('programas')
         .skip(desde)
         .limit(5)
         .exec(
@@ -64,18 +65,14 @@ app.get('/', (req, res) => {
 
 });
 
-
-
 //==============================
-//  Actualizar usuario
+//  Obtener usuario por ID
 //==============================
 
-app.put('/:id', mdAutenticacion.verifaToken, (req, res) => {
-
-    var id = req.params.id;
-    var body = req.body;
-
-    Usuario.findById(id, (err, usuario) => {
+app.get('/:id', mdAutenticacion.verifaToken, (req, res) => {
+    const id = req.params.id;
+    console.log(id);
+    Usuario.findById(id).exec((err, usuario) => {
         if (err) {
             return res.status(500).json({
                 ok: false,
@@ -92,26 +89,131 @@ app.put('/:id', mdAutenticacion.verifaToken, (req, res) => {
             });
         }
 
-        usuario.nombre = body.nombre;
-        usuario.email = body.email;
-        usuario.role = body.role;
+        if (usuario.length <= 0) {
 
-        usuario.save((err, usuarioGuardado) => {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'No hay usuarios en base de datos ',
+                errors: err
+            });
+        }
+        usuario.password = 'XD';
+        res.status(200).json({
+            ok: true,
+            usuario: usuario
+        });
+
+    });
+});
+
+//==============================
+//  Actualizar usuario
+//==============================
+
+app.put('/:id', (req, res) => {
+
+    var id = req.params.id;
+    var body = req.body;
+
+    Usuario.findById(id)
+        .populate('programas', 'nombre')
+        .exec((err, usuario) => {
             if (err) {
-                return res.status(400).json({
+                return res.status(500).json({
                     ok: false,
-                    mensaje: 'Error al actualizar usuario',
+                    mensaje: 'Error al buscar usuario',
                     errors: err
                 });
             }
 
-            usuarioGuardado.password = ':)';
-            res.status(200).json({
-                ok: true,
-                usuario: usuarioGuardado
+            if (!usuario) {
+                return res.status(400).json({
+                    ok: false,
+                    mensaje: 'EL usuario con id ' + id + ' no existe',
+                    errors: { message: 'No existe un usuario con ese ID' }
+                });
+            }
+
+            usuario.nombre = body.nombre;
+            usuario.email = body.email;
+            usuario.role = body.role;
+            usuario.programas = body.programas;
+
+
+
+            usuario.save((err, usuarioGuardado) => {
+                if (err) {
+                    return res.status(400).json({
+                        ok: false,
+                        mensaje: 'Error al actualizar usuario',
+                        errors: err
+                    });
+                }
+                usuarioGuardado.password = ':)';
+                Usuario.findById(usuarioGuardado._id)
+                    .populate('programas')
+                    .exec((err, usuario) => {
+                        res.status(200).json({
+                            ok: true,
+                            usuario: usuario
+                        });
+                    });
             });
         });
-    });
+});
+
+//==============================
+//  Añadir programa a Usuario
+//==============================
+
+app.put('/addprograma/:id', mdAutenticacion.verifaToken, (req, res) => {
+
+    var id = req.params.id;
+    var body = req.body;
+
+    console.log(id, 'y', body);
+
+    Usuario.findById(id)
+        .exec((err, usuario) => {
+
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    mensaje: 'Error al buscar usuario',
+                    errors: err
+                });
+            }
+
+            if (!usuario) {
+                return res.status(400).json({
+                    ok: false,
+                    mensaje: 'EL usuario con id ' + id + ' no existe',
+                    errors: { message: 'No existe un usuario con ese ID' }
+                });
+            }
+
+            usuario.programas.push(body.id);
+
+            usuario.save((err, usuarioGuardado) => {
+                if (err) {
+                    return res.status(400).json({
+                        ok: false,
+                        mensaje: 'Error al actualizar usuario',
+                        errors: err
+                    });
+                }
+                usuarioGuardado.password = ':)';
+                Usuario.findById(usuarioGuardado._id)
+                    .exec((err, usuario) => {
+                        res.status(200).json({
+                            ok: true,
+                            usuario: usuario
+                        });
+                    });
+            });
+
+        });
+
 });
 
 //==============================

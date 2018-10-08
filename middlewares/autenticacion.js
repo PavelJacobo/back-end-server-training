@@ -19,7 +19,6 @@ exports.verifaToken = function(req, res, next) {
         }
 
         req.usuario = decoded.usuario;
-        console.log("Usuario::::::::::::::", req.usuario);
 
         next();
     });

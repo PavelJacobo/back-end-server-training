@@ -143,11 +143,11 @@ function subirPorTipo(tipocoleccion, id, nombreArchivo, res) {
 
             noticia.img = nombreArchivo;
 
-            noticia.save((err, medicoActualizado) => {
+            noticia.save((err, noticiaActualizada) => {
                 return res.status(200).json({
                     ok: true,
                     mensaje: 'Imagen de noticia actualizada',
-                    noticia: medicoActualizado
+                    noticia: noticiaActualizada
                 });
             });
         });
@@ -180,11 +180,11 @@ function subirPorTipo(tipocoleccion, id, nombreArchivo, res) {
 
             programa.img = nombreArchivo;
 
-            programa.save((err, hospitalActualizado) => {
+            programa.save((err, programaActualizado) => {
                 return res.status(200).json({
                     ok: true,
                     mensaje: 'Imagen de programa actualizada',
-                    programa: hospitalActualizado
+                    programa: programaActualizado
                 });
             });
         });
@@ -192,6 +192,58 @@ function subirPorTipo(tipocoleccion, id, nombreArchivo, res) {
 
 }
 
+
+app.post('/imagen', (req, res, next) => {
+
+    console.log(req.files);
+    if (!req.files) {
+        res.status(400).json({
+            ok: false,
+            mensaje: 'Archivo No seleccionado',
+            error: { message: 'Imagen no seleccionada, es necesario seleccionar una imagen' }
+        });
+    }
+
+    // Obtener nombre del archivo
+    var archivo = req.files.imagen;
+    var splitDeArchivo = archivo.name.split('.');
+    extensionArchivo = splitDeArchivo[splitDeArchivo.length - 1];
+    console.log('Extensión del archivo', extensionArchivo);
+    // Solo aceptamos éstas extensiones
+    var extensionesValidas = ['png', 'jpeg', 'jpg', 'gif'];
+
+    if (extensionesValidas.indexOf(extensionArchivo) < 0) {
+        res.status(400).json({
+            ok: false,
+            mensaje: 'Extensión No Valida',
+            error: { message: 'Los formatos válidos son' + extensionesValidas.join(', ') }
+        });
+    }
+
+    //nombre personalizado del archivo
+    var nombreArchivo = `${ new Date().getMilliseconds() }.${extensionArchivo}`;
+
+    // mover el archivo del temporal a un path
+    var path = `./uploads/programa/${ nombreArchivo }`;
+
+    archivo.mv(path, err => {
+        if (err) {
+            res.status(500).json({
+                ok: false,
+                mensaje: 'Error al mover el archivo',
+                error: err
+            });
+        }
+
+        res.status(200).json({
+            ok: true,
+            path: path,
+            img: nombreArchivo
+        });
+
+    });
+
+});
 
 
 module.exports = app;
