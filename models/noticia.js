@@ -9,7 +9,7 @@ var noticiaChema = new Schema({
     contenido: { type: String, required: [true, 'El contenido es necesario'] },
     tags: { type: [String], required: [true, 'debe añadir al menos un tag'] },
     img: { type: String, required: false },
-    google: { type: Boolean, default: false }
+    date: { type: Date, required: false }
 }, { collection: 'noticias' });
 
 noticiaChema.plugin(uniqueValidator, { message: 'El {PATH} debe de ser único' });
