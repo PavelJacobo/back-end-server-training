@@ -9,6 +9,7 @@ var noticiaChema = new Schema({
     contenido: { type: String, required: [true, 'El contenido es necesario'] },
     tags: { type: [String], required: [true, 'debe añadir al menos un tag'] },
     img: { type: String, required: false },
+    author: { type: Schema.Types.ObjectId, ref: 'Usuario' },
     date: { type: Date, required: false }
 }, { collection: 'noticias' });
 

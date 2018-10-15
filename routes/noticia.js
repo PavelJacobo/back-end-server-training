@@ -3,7 +3,7 @@ var app = express();
 var Noticia = require('../models/noticia');
 
 
-// rutas
+// Get Noticia
 app.get('/', (req, res, next) => {
     res.status(200).json({
         ok: true,
@@ -11,16 +11,38 @@ app.get('/', (req, res, next) => {
     });
 });
 
+// get Noticia por id
+app.get('/:id', (req, res, next) => {
+    const id = req.params.id;
+    Noticia.find({ author: id })
+        .exec((err, noticias) => {
+            if (err) {
+                return res.status(404).json({
+                    status: false,
+                    err: err,
+                    message: 'Error al buscar noticias del usuario'
+                });
+            }
+
+            res.status(200).json({
+                status: true,
+                noticias: noticias
+            });
+        });
+});
+
 // Crear noticia
 
 app.post('/', (req, res) => {
     const body = req.body;
+    console.log('BODY', body)
     const noticia = new Noticia({
         titulo: body.titulo,
         resume: body.resume,
         contenido: body.contenido,
         tags: body.tags,
         img: body.img,
+        author: body.author,
         date: body.date
     });
 
@@ -38,6 +60,32 @@ app.post('/', (req, res) => {
         });
     });
 
+});
+
+// ELiminar una noticia por id
+
+app.delete('/:id', (req, res, next) => {
+    let id = req.params.id;
+    Noticia.findByIdAndRemove(id, (err, noticiaBorrada) => {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'Error al borrar noticia',
+                errors: err
+            });
+        }
+        if (!noticiaBorrada) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'No existen Noticias con ese ID',
+                errors: { message: 'No existe ningún noticia con ese ID' }
+            });
+        }
+        res.status(200).json({
+            ok: true,
+            noticia: noticiaBorrada
+        });
+    });
 });
 
 module.exports = app;
