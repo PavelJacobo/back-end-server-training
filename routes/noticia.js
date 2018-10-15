@@ -11,8 +11,28 @@ app.get('/', (req, res, next) => {
     });
 });
 
-// get Noticia por id
+// Get Noticia por Id de noticia
 app.get('/:id', (req, res, next) => {
+    const id = req.params.id;
+    Noticia.findById(id)
+        .exec((err, noticiaEncontrada) => {
+            if (err) {
+                return res.status(404).json({
+                    status: false,
+                    err: err,
+                    message: 'Error al buscar noticia'
+                });
+            }
+
+            res.status(200).json({
+                status: true,
+                noticia: noticiaEncontrada
+            });
+        });
+});
+
+// get Noticia de Usuario por id de Usuario
+app.get('/user/:id', (req, res, next) => {
     const id = req.params.id;
     Noticia.find({ author: id })
         .exec((err, noticias) => {
