@@ -15,6 +15,7 @@ app.get('/', (req, res, next) => {
 app.get('/:id', (req, res, next) => {
     const id = req.params.id;
     Noticia.findById(id)
+        .populate('author', 'nombre')
         .exec((err, noticiaEncontrada) => {
             if (err) {
                 return res.status(404).json({
