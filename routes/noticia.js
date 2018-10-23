@@ -83,6 +83,37 @@ app.post('/', (req, res) => {
 
 });
 
+// Actualizar Noticia por Id
+
+app.put('/:id', (req, res) => {
+    let id = req.params.id;
+    console.log('ID', id);
+    let body = req.body;
+    console.log('BODY', body);
+    Noticia.findByIdAndUpdate(id, {
+            $set: {
+                titulo: body.titulo,
+                resume: body.resume,
+                contenido: body.cotenido,
+                tags: body.tags,
+                img: body.img,
+            }
+        })
+        .exec((err, noticiaEncontrada) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    mensaje: 'Error al actualizar Noticia',
+                    errors: err
+                });
+            }
+            res.status(200).json({
+                ok: true,
+                noticia: noticiaEncontrada
+            });
+        });
+});
+
 // ELiminar una noticia por id
 
 app.delete('/:id', (req, res, next) => {

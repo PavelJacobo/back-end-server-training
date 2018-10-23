@@ -11,7 +11,7 @@ var Programa = require('../models/programa');
 var Noticia = require('../models/noticia');
 
 
-
+// Actualizar Imagen
 app.put('/:tipocoleccion/:id', (req, res, next) => {
 
     var tipocoleccion = req.params.tipocoleccion;
@@ -195,7 +195,8 @@ function subirPorTipo(tipocoleccion, id, nombreArchivo, res) {
 
 app.post('/imagen', (req, res, next) => {
 
-    console.log(req.files);
+    let tipo = req.query['tipo'];
+    // console.log(req.files);
     if (!req.files) {
         res.status(400).json({
             ok: false,
@@ -224,7 +225,7 @@ app.post('/imagen', (req, res, next) => {
     var nombreArchivo = `${ new Date().getMilliseconds() }.${extensionArchivo}`;
 
     // mover el archivo del temporal a un path
-    var path = `./uploads/programa/${ nombreArchivo }`;
+    var path = `./uploads/${tipo}/${ nombreArchivo }`;
 
     archivo.mv(path, err => {
         if (err) {
