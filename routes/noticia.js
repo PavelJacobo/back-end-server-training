@@ -5,10 +5,21 @@ var Noticia = require('../models/noticia');
 
 // Get Noticia
 app.get('/', (req, res, next) => {
-    res.status(200).json({
-        ok: true,
-        mensaje: 'Petición realizada correctamente'
-    });
+    Noticia.find({})
+        .exec((err, noticiasEncontradas) => {
+            if (err) {
+                return res.status(404).json({
+                    status: false,
+                    err: err,
+                    message: 'Error al buscar noticia'
+                });
+            }
+
+            res.status(200).json({
+                status: true,
+                noticias: noticiasEncontradas
+            });
+        });
 });
 
 // Get Noticia por Id de noticia
@@ -94,7 +105,7 @@ app.put('/:id', (req, res) => {
             $set: {
                 titulo: body.titulo,
                 resume: body.resume,
-                contenido: body.cotenido,
+                contenido: body.contenido,
                 tags: body.tags,
                 img: body.img,
             }
