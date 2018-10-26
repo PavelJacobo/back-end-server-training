@@ -22,6 +22,31 @@ app.get('/', (req, res, next) => {
         });
 });
 
+// Get noticia por tipo
+
+app.get('/tipo/:tipo', (req, res, next) => {
+    const tipo = req.params.tipo;
+    console.log(tipo);
+    Noticia.find({ 'categoria': tipo })
+        .sort({ date: -1 })
+        .limit(3)
+        .populate('author')
+        .exec((err, noticiasEncontradas) => {
+            if (err) {
+                return res.status(404).json({
+                    status: false,
+                    err: err,
+                    message: 'Error al buscar noticia'
+                });
+            }
+
+            res.status(200).json({
+                status: true,
+                noticias: noticiasEncontradas
+            });
+        });
+});
+
 // Get Noticia por Id de noticia
 app.get('/:id', (req, res, next) => {
     const id = req.params.id;
@@ -73,6 +98,7 @@ app.post('/', (req, res) => {
         resume: body.resume,
         contenido: body.contenido,
         tags: body.tags,
+        categoria: body.categoria,
         img: body.img,
         author: body.author,
         date: body.date
@@ -107,6 +133,7 @@ app.put('/:id', (req, res) => {
                 resume: body.resume,
                 contenido: body.contenido,
                 tags: body.tags,
+                categoria: body.categoria,
                 img: body.img,
             }
         })

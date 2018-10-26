@@ -8,6 +8,7 @@ var noticiaChema = new Schema({
     resume: { type: String, required: [true, 'El resumen es necesario'] },
     contenido: { type: String, required: [true, 'El contenido es necesario'] },
     tags: { type: [String], required: [true, 'debe añadir al menos un tag'] },
+    categoria: { type: String, required: false },
     img: { type: String, required: false },
     author: { type: Schema.Types.ObjectId, ref: 'Usuario' },
     date: { type: Date, required: false }
