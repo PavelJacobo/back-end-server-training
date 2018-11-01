@@ -34,7 +34,7 @@ const uploadRoutes = require('./routes/upload');
 
 // Conección a Base de datos
 mongoose.connect(
-    'mongodb://localhost:27017/training1', { useNewUrlParser: true },
+    'mongodb://ondapoligono:0nd4p0l1g0n0(@ds135537.mlab.com:35537/ondapoligonodb', { useNewUrlParser: true },
     (err, res) => {
         if (err) throw err;
 

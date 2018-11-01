@@ -49,33 +49,33 @@ app.put('/:tipocoleccion/:id', (req, res, next) => {
     var extensionesValidas = ['png', 'jpeg', 'jpg', 'gif'];
 
     if (extensionesValidas.indexOf(extensionArchivo) < 0) {
-        res.status(400).json({
+        return res.status(400).json({
             ok: false,
             mensaje: 'Extensión No Valida',
             error: { message: 'Los formatos válidos son' + extensionesValidas.join(', ') }
         });
+    } else {
+
+
+        //nombre personalizado del archivo
+        var nombreArchivo = `${ id }-${ new Date().getMilliseconds() }.${extensionArchivo}`;
+
+        // mover el archivo del temporal a un path
+        var path = `./uploads/${ tipocoleccion }/${ nombreArchivo }`;
+        archivo.mv(path, err => {
+            if (err) {
+                res.status(500).json({
+                    ok: false,
+                    mensaje: 'Error al mover el archivo',
+                    error: err
+                });
+            }
+            subirPorTipo(tipocoleccion, id, nombreArchivo, res);
+
+        });
+
+
     }
-
-
-    //nombre personalizado del archivo
-    var nombreArchivo = `${ id }-${ new Date().getMilliseconds() }.${extensionArchivo}`;
-
-    // mover el archivo del temporal a un path
-    var path = `./uploads/${ tipocoleccion }/${ nombreArchivo }`;
-    archivo.mv(path, err => {
-        if (err) {
-            res.status(500).json({
-                ok: false,
-                mensaje: 'Error al mover el archivo',
-                error: err
-            });
-        }
-        subirPorTipo(tipocoleccion, id, nombreArchivo, res);
-
-    });
-
-
-
 });
 
 
