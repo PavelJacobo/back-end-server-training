@@ -122,14 +122,14 @@ app.post('/', (req, res) => {
             if (!usuarioDB) {
                 return res.status(400).json({
                     ok: false,
-                    mensaje: 'Credenciales incorrectas - email'
+                    mensaje: 'Credenciales incorrectas'
                 });
             }
 
             if (!bcrypt.compareSync(body.password, usuarioDB.password)) {
                 return res.status(400).json({
                     ok: false,
-                    mensaje: 'Credenciales incorrectas - password'
+                    mensaje: 'Credenciales incorrectas'
                 });
             }
 
@@ -142,7 +142,8 @@ app.post('/', (req, res) => {
                 ok: true,
                 usuario: usuarioDB,
                 id: usuarioDB._id,
-                token: token
+                token: token,
+                menu: getMenu(usuarioDB.role)
             });
         });
 
@@ -150,6 +151,33 @@ app.post('/', (req, res) => {
 
 
 });
+
+function getMenu(ROLE) {
+    menu = [{
+            titulo: 'Perfil',
+            icono: 'far fa-user',
+            submenu: [
+                { titulo: 'Salir', icon: 'fas fa-sign-out-alt' },
+                { titulo: 'Mi usuario', url: 'perfil', icon: 'far fa-user' }
+            ]
+        },
+        {
+            titulo: 'Administración',
+            icono: 'fas fa-toolbox',
+            submenu: [
+                { titulo: 'Noticias', url: 'noticias', icon: 'far fa-newspaper' },
+                { titulo: 'Programación', url: 'programacion', icon: 'far fa-clock' },
+                { titulo: 'Reservar', url: 'ocupacion', icon: 'far fa-calendar-alt' },
+                { titulo: 'Perfil Programas', url: 'perfil_programa', icon: 'fas fa-broadcast-tower' }
+            ]
+        }
+    ];
+
+    if (ROLE === 'ADMIN_ROLE') {
+        menu[1].submenu.unshift({ titulo: 'Gestion de Web', url: 'gestion_web', icon: 'fas fa-broadcast-tower' });
+    }
+    return menu;
+}
 
 
 module.exports = app;

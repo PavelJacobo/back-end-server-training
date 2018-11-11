@@ -6,6 +6,7 @@ var Noticia = require('../models/noticia');
 // Get Noticia
 app.get('/', (req, res, next) => {
     Noticia.find({})
+        .populate('author')
         .exec((err, noticiasEncontradas) => {
             if (err) {
                 return res.status(404).json({
@@ -23,7 +24,6 @@ app.get('/', (req, res, next) => {
 });
 
 // Get noticia por tipo
-
 app.get('/tipo/:tipo', (req, res, next) => {
     const tipo = req.params.tipo;
     console.log(tipo);

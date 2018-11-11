@@ -139,6 +139,11 @@ app.put('/:id', (req, res) => {
             usuario.role = body.role;
             usuario.programas = body.programas;
 
+            if (body.password1 && body.password2) {
+                if (body.password1 === body.password2) {
+                    usuario.password = bcrypt.hashSync(body.password1, 10);
+                }
+            }
 
 
             usuario.save((err, usuarioGuardado) => {
