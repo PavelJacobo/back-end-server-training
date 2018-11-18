@@ -10,11 +10,12 @@ const Programa = require('../models/programa');
 app.get('/', (req, res) => {
 
     var desde = req.query.desde || 0;
+    var limit = req.query.limit || 0;
     desde = Number(desde);
-
+    limit = Number(limit);
     Programa.find({}, 'nombre contenido fecha colaboradores img')
         .skip(desde)
-        .limit()
+        .limit(limit)
         .exec(
             (err, programas) => {
                 if (err) {

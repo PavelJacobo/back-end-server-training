@@ -5,8 +5,16 @@ var Noticia = require('../models/noticia');
 
 // Get Noticia
 app.get('/', (req, res, next) => {
+
+    var desde = req.query.desde || 0;
+    var limit = req.query.limit || 0;
+    desde = Number(desde);
+    limit = Number(limit);
+    console.log(req.query.limit);
     Noticia.find({})
         .populate('author')
+        .skip(desde)
+        .limit(limit)
         .exec((err, noticiasEncontradas) => {
             if (err) {
                 return res.status(404).json({
@@ -15,11 +23,22 @@ app.get('/', (req, res, next) => {
                     message: 'Error al buscar noticia'
                 });
             }
+            Noticia.countDocuments({}, (err, conteo) => {
+                if (err) {
 
-            res.status(200).json({
-                status: true,
-                noticias: noticiasEncontradas
+                    res.status(400).json({
+                        ok: false,
+                        message: 'Error al cuantificar el número de noticias, Posible problema de base de datos'
+                    });
+
+                }
+                res.status(200).json({
+                    status: true,
+                    noticias: noticiasEncontradas,
+                    total: conteo
+                });
             });
+
         });
 });
 

@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
 
     var desde = req.query.desde || 0;
     desde = Number(desde);
-
+    console.log(req.query.desde);
     Usuario.find({}, 'nombre email img role programas')
         .populate('programas')
         .skip(desde)
@@ -57,9 +57,6 @@ app.get('/', (req, res) => {
                         total: conteo
                     });
                 });
-
-
-
 
             });
 
