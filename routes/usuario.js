@@ -107,7 +107,7 @@ app.get('/:id', mdAutenticacion.verifaToken, (req, res) => {
 //  Actualizar usuario
 //==============================
 
-app.put('/:id', (req, res) => {
+app.put('/:id', [mdAutenticacion.verifaToken, mdAutenticacion.verificaAdminOUser], (req, res) => {
 
     var id = req.params.id;
     var body = req.body;
@@ -139,6 +139,12 @@ app.put('/:id', (req, res) => {
             if (body.password1 && body.password2) {
                 if (body.password1 === body.password2) {
                     usuario.password = bcrypt.hashSync(body.password1, 10);
+                } else {
+                    return res.status(403).json({
+                        ok: false,
+                        error: 'Las contraseñas no coinciden',
+
+                    });
                 }
             }
 
@@ -168,7 +174,7 @@ app.put('/:id', (req, res) => {
 //  Añadir programa a Usuario
 //==============================
 
-app.put('/addprograma/:id', mdAutenticacion.verifaToken, (req, res) => {
+app.put('/addprograma/:id', [mdAutenticacion.verifaToken, mdAutenticacion.verificaAdminOUser], (req, res) => {
 
     var id = req.params.id;
     var body = req.body;
@@ -222,7 +228,7 @@ app.put('/addprograma/:id', mdAutenticacion.verifaToken, (req, res) => {
 //  Crear un nuevo usuario
 //==============================
 
-app.post('/', (req, res) => {
+app.post('/', [mdAutenticacion.verifaToken, mdAutenticacion.verificaAdmin], (req, res) => {
 
     var body = req.body;
 
@@ -255,7 +261,7 @@ app.post('/', (req, res) => {
 //  Borrar un  usuario
 //==============================
 
-app.delete('/:id', mdAutenticacion.verifaToken, (req, res) => {
+app.delete('/:id', [mdAutenticacion.verifaToken, mdAutenticacion.verificaAdmin], (req, res) => {
 
     var id = req.params.id;
 
