@@ -31,6 +31,7 @@ const eventOcupRoutes = require('./routes/eventocupacion');
 const busquedaRoutes = require('./routes/busqueda');
 const imagenRoutes = require('./routes/imagen');
 const uploadRoutes = require('./routes/upload');
+const downloadRoutes = require('./routes/download');
 
 // Conección a Base de datos
 mongoose.connect(
@@ -51,6 +52,7 @@ app.use('/eventocup', eventOcupRoutes);
 app.use('/img', imagenRoutes);
 app.use('/busqueda/', busquedaRoutes);
 app.use('/upload', uploadRoutes);
+app.use('/download', downloadRoutes);
 app.use('/', appRoutes);
 
 // Establecemos socket

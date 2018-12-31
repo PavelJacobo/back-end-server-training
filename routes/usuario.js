@@ -111,6 +111,7 @@ app.put('/:id', [mdAutenticacion.verifaToken, mdAutenticacion.verificaAdminOUser
 
     var id = req.params.id;
     var body = req.body;
+    console.log(body);
 
     Usuario.findById(id)
         .populate('programas', 'nombre')

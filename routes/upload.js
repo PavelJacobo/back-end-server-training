@@ -192,7 +192,7 @@ function subirPorTipo(tipocoleccion, id, nombreArchivo, res) {
 
 }
 
-
+// subir por primera vez la imagen
 app.post('/imagen', (req, res, next) => {
 
     let tipo = req.query['tipo'];
@@ -211,7 +211,7 @@ app.post('/imagen', (req, res, next) => {
     extensionArchivo = splitDeArchivo[splitDeArchivo.length - 1];
     console.log('Extensión del archivo', extensionArchivo);
     // Solo aceptamos éstas extensiones
-    var extensionesValidas = ['png', 'jpeg', 'jpg', 'gif'];
+    var extensionesValidas = ['png', 'jpeg', 'jpg', 'gif', 'pdf', 'PNG', 'JPEG', 'JPG', 'GIF', 'PDF'];
 
     if (extensionesValidas.indexOf(extensionArchivo) < 0) {
         res.status(400).json({
@@ -222,7 +222,13 @@ app.post('/imagen', (req, res, next) => {
     }
 
     //nombre personalizado del archivo
-    var nombreArchivo = `${ new Date().getMilliseconds() }.${extensionArchivo}`;
+    var nombreArchivo = `${ new Date().getMilliseconds() }.${ extensionArchivo }`;
+
+    // nombre si es pdf
+
+    if (extensionArchivo === 'pdf') {
+        var nombreArchivo = `${ new Date().getTime() }.redonda.${ extensionArchivo }`;
+    }
 
     // mover el archivo del temporal a un path
     var path = `./uploads/${tipo}/${ nombreArchivo }`;
