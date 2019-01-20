@@ -160,6 +160,7 @@ app.put('/:id', mdAutenticacion.verifaToken, (req, res) => {
 app.post('/', (req, res) => {
 
     var body = req.body;
+    console.log(body);
 
     var programa = new Programa({
         nombre: body.nombre,
@@ -171,7 +172,7 @@ app.post('/', (req, res) => {
 
     programa.save((err, programaGuardado) => {
         if (err) {
-            return res.status(400).json({
+            res.status(400).json({
                 ok: false,
                 mensaje: 'Error al crear programa',
                 errors: err

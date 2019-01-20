@@ -40,7 +40,6 @@ exports.verificaAdmin = function(req, res, next) {
             ok: false,
             mensaje: 'Token incorrecto - No es administrador',
             errors: {
-                err: err,
                 message: 'No es posible realizar dicha acción. Unauthorized'
             }
         });

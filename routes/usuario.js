@@ -249,6 +249,7 @@ app.post('/', [mdAutenticacion.verifaToken, mdAutenticacion.verificaAdmin], (req
                 errors: err
             });
         }
+        usuario.password = 'XD XD';
         res.status(201).json({
             ok: true,
             usuario: usuarioGuardado,

@@ -48,7 +48,7 @@ app.get('/tipo/:tipo', (req, res, next) => {
     console.log(tipo);
     Noticia.find({ 'categoria': tipo })
         .sort({ date: -1 })
-        .limit(3)
+        .limit(5)
         .populate('author')
         .exec((err, noticiasEncontradas) => {
             if (err) {
