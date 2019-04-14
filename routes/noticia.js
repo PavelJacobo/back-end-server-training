@@ -43,12 +43,15 @@ app.get('/', (req, res, next) => {
 });
 
 // Get noticia por tipo
-app.get('/tipo/:tipo', (req, res, next) => {
+app.get('/tipo/:tipo/:limit?', (req, res, next) => {
     const tipo = req.params.tipo;
+    const limit = req.params.limit;
+    let limite = limit ? parseInt(limit): 5;
     console.log(tipo);
+    console.log(limit, 'LIMIT');
     Noticia.find({ 'categoria': tipo })
         .sort({ date: -1 })
-        .limit(5)
+        .limit(limite)
         .populate('author')
         .exec((err, noticiasEncontradas) => {
             if (err) {

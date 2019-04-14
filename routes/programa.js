@@ -216,4 +216,21 @@ app.delete('/:id', mdAutenticacion.verifaToken, (req, res) => {
 
 });
 
+
+//==============================
+//  Borra un usuario de un programa
+//==============================
+
+app.post('/user/:id', (req, res) => {
+
+    var body = req.body;
+    console.log(body);
+    Programa.find({}, { $pull: { colaboradores: body.userID } }, (err, res) => {
+        console.log(err);
+        console.log(res, 'RESPUESTA');
+
+    });
+
+});
+
 module.exports = app;
