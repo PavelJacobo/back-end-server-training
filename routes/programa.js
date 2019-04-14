@@ -157,7 +157,7 @@ app.put('/:id', mdAutenticacion.verifaToken, (req, res) => {
 //  Crear un nuevo programa
 //==============================
 
-app.post('/', (req, res) => {
+app.post('/', mdAutenticacion.verifaToken, (req, res) => {
 
     var body = req.body;
     console.log(body);
@@ -225,9 +225,9 @@ app.post('/user/:id', (req, res) => {
 
     var body = req.body;
     console.log(body);
-    Programa.find({}, { $pull: { colaboradores: body.userID } }, (err, res) => {
+    Programa.updateMany({}, { $pull: { colaboradores: body.userID } }, {safe: true, upsert: true}, (err, res) => {
         console.log(err);
-        console.log(res, 'RESPUESTA');
+        console.log(res, 'RESPUESTA ');
 
     });
 
