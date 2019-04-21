@@ -35,7 +35,7 @@ const downloadRoutes = require('./routes/download');
 
 // Conección a Base de datos
 mongoose.connect(
-    'mongodb://ondapoligono:0nd4p0l1g0n0(@ds135537.mlab.com:35537/ondapoligonodb', { useNewUrlParser: true },
+    `mongodb://${process.env.USER_NAME}:${process.env.USER_PASSWORD}@${process.env.SOCKET_DB_CONN}:35537/${process.env.DB_NAME}`, { useNewUrlParser: true },
     (err, res) => {
         if (err) throw err;
 

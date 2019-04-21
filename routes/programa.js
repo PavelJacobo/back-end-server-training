@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
     var limit = req.query.limit || 0;
     desde = Number(desde);
     limit = Number(limit);
-    Programa.find({}, 'nombre contenido fecha colaboradores img')
+    Programa.find({}, 'nombre contenido fecha colaboradores img potcast facebook twitter')
         .skip(desde)
         .limit(limit)
         .exec(
@@ -136,6 +136,9 @@ app.put('/:id', mdAutenticacion.verifaToken, (req, res) => {
         programa.colaboradores = body.colaboradores;
         programa.img = body.img;
         programa.fecha = body.fecha;
+        programa.potcast = body.potcast;
+        programa.facebook = body.facebook;
+        programa.twitter = body.twitter;
         programa.save((err, programaGuardado) => {
             if (err) {
                 return res.status(400).json({
@@ -167,7 +170,10 @@ app.post('/', mdAutenticacion.verifaToken, (req, res) => {
         contenido: body.contenido,
         colaboradores: body.colaboradores,
         fecha: body.fecha,
-        img: body.img
+        img: body.img,
+        potcast: body.potcast,
+        facebook: body.facebook,
+        twitter: body.twitter
     });
 
     programa.save((err, programaGuardado) => {
