@@ -196,7 +196,7 @@ function subirPorTipo(tipocoleccion, id, nombreArchivo, res) {
 app.post('/imagen', (req, res, next) => {
 
     let tipo = req.query['tipo'];
-    // console.log(req.files);
+    console.log(req.files);
     if (!req.files) {
         res.status(400).json({
             ok: false,
@@ -227,7 +227,14 @@ app.post('/imagen', (req, res, next) => {
     // nombre si es pdf
 
     if (extensionArchivo === 'pdf') {
-        var nombreArchivo = `${ new Date().getTime() }.redonda.${ extensionArchivo }`;
+        if (req.files.desde && req.files.hasta) {
+            // var inicioagenda = req.files.desde.name.toLowerCase().replace(/ /g,'').trim();
+            // var finagenda = req.files.hasta.name.toLowerCase().replace(/ /g,'').trim();
+            const inicioagenda = getDateFormat(req.files.desde.name);
+            const finagenda = getDateFormat(req.files.hasta.name);
+            nombreArchivo = `redonda.${inicioagenda}_${finagenda}.${ extensionArchivo }`;
+        }
+        
     }
 
     // mover el archivo del temporal a un path
@@ -251,6 +258,23 @@ app.post('/imagen', (req, res, next) => {
     });
 
 });
+
+function getDateFormat(datestring) {
+    console.log(datestring);
+    var date = new Date(datestring);
+    console.log(date)
+    const year = date.getFullYear().toString();
+    let month = (date.getMonth() + 1).toString();
+    let day = date.getDate().toString();
+    (day.length == 1) && (day = '0' + day);
+    (month.length == 1) && (month = '0' + month);
+
+    console.log(year);
+    console.log(month);
+    console.log(day);
+    var dateformat = year + month + day;
+    return dateformat;
+}
 
 
 module.exports = app;
