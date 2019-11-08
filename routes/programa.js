@@ -178,13 +178,13 @@ app.post('/', mdAutenticacion.verifaToken, (req, res) => {
 
     programa.save((err, programaGuardado) => {
         if (err) {
-            res.status(400).json({
+           return res.status(400).json({
                 ok: false,
                 mensaje: 'Error al crear programa',
                 errors: err
             });
         }
-        res.status(201).json({
+       return res.status(200).json({
             ok: true,
             programa: programaGuardado
         });

@@ -46,13 +46,13 @@ app.put('/:tipocoleccion/:id', (req, res, next) => {
     extensionArchivo = splitDeArchivo[splitDeArchivo.length - 1];
     console.log('Extensión del archivo', extensionArchivo);
     // Solo aceptamos éstas extensiones
-    var extensionesValidas = ['png', 'jpeg', 'jpg', 'gif'];
+    var extensionesValidas = ['png', 'jpeg', 'jpg', 'gif', 'pdf', 'PNG', 'JPEG', 'JPG', 'GIF', 'PDF'];
 
     if (extensionesValidas.indexOf(extensionArchivo) < 0) {
         return res.status(400).json({
             ok: false,
             mensaje: 'Extensión No Valida',
-            error: { message: 'Los formatos válidos son' + extensionesValidas.join(', ') }
+            error: { message: 'Los formatos válidos son ' + extensionesValidas.join(', ') }
         });
     } else {
 
@@ -64,7 +64,7 @@ app.put('/:tipocoleccion/:id', (req, res, next) => {
         var path = `./uploads/${ tipocoleccion }/${ nombreArchivo }`;
         archivo.mv(path, err => {
             if (err) {
-                res.status(500).json({
+                return res.status(500).json({
                     ok: false,
                     mensaje: 'Error al mover el archivo',
                     error: err
@@ -108,7 +108,14 @@ function subirPorTipo(tipocoleccion, id, nombreArchivo, res) {
             usuario.img = nombreArchivo;
 
             usuario.save((err, usuarioActualizado) => {
-                return res.status(200).json({
+                if (err) {
+                    return res.status(400).json({
+                        ok: false,
+                        mensaje: 'Error al actualizar el usuario',
+                        error: err
+                    });
+                }
+             return  res.status(200).json({
                     ok: true,
                     mensaje: 'Imagen de usuario actualizada',
                     usuario: usuarioActualizado
@@ -196,7 +203,7 @@ function subirPorTipo(tipocoleccion, id, nombreArchivo, res) {
 app.post('/imagen', (req, res, next) => {
 
     let tipo = req.query['tipo'];
-    console.log(req.files);
+    // console.log(req.files);
     if (!req.files) {
         res.status(400).json({
             ok: false,
@@ -214,10 +221,10 @@ app.post('/imagen', (req, res, next) => {
     var extensionesValidas = ['png', 'jpeg', 'jpg', 'gif', 'pdf', 'PNG', 'JPEG', 'JPG', 'GIF', 'PDF'];
 
     if (extensionesValidas.indexOf(extensionArchivo) < 0) {
-        res.status(400).json({
+       return res.status(400).json({
             ok: false,
             mensaje: 'Extensión No Valida',
-            error: { message: 'Los formatos válidos son' + extensionesValidas.join(', ') }
+            error: { message: 'Los formatos válidos son ' + extensionesValidas.join(', ') }
         });
     }
 
@@ -242,7 +249,7 @@ app.post('/imagen', (req, res, next) => {
 
     archivo.mv(path, err => {
         if (err) {
-            res.status(500).json({
+          return  res.status(500).json({
                 ok: false,
                 mensaje: 'Error al mover el archivo',
                 error: err

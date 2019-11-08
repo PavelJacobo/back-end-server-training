@@ -32,12 +32,12 @@ const busquedaRoutes = require('./routes/busqueda');
 const imagenRoutes = require('./routes/imagen');
 const uploadRoutes = require('./routes/upload');
 const downloadRoutes = require('./routes/download');
-
+require('dotenv').config();
 // Conección a Base de datos
 // mongodb://ondapoligono:0nd4p0l1g0n0(@ds135537.mlab.com:35537/ondapoligonodb
 // mongodb://${process.env.USER_NAME}:${process.env.USER_PASSWORD}@${process.env.SOCKET_DB_CONN}:35537/${process.env.DB_NAME}
 mongoose.connect(
-    `mongodb://ondapoligono:0nd4p0l1g0n0(@ds135537.mlab.com:35537/ondapoligonodb`, { useNewUrlParser: true },
+    `mongodb://${process.env.USER_NAME || 'ondapoligono' }:${process.env.USER_PASSWORD || '0nd4p0l1g0n0('}@${process.env.SOCKET_DB_CONN || 'ds135537.mlab.com'}:${process.env.SOCKET_DB_PORT || '35537' }/${process.env.DB_NAME || 'ondapoligonodb'}`, { useNewUrlParser: true, useUnifiedTopology: true, },
     (err, res) => {
         if (err) throw err;
 

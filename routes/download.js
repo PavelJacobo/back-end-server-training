@@ -9,7 +9,7 @@ var dir = path.resolve(".") + '/uploads/redonda'; // give pat
 app.get('/', (req, res) => {
     fs.readdir(dir, (err, list) => {
         if (err) {
-            res.status(500).json({
+           return res.status(500).json({
                 ok: false,
                 mensaje: 'Error al listar los archivos o error al leer directorio',
                 error: err
