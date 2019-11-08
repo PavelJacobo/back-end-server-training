@@ -64,6 +64,7 @@ app.put('/:tipocoleccion/:id', (req, res, next) => {
         var path = `./uploads/${ tipocoleccion }/${ nombreArchivo }`;
         archivo.mv(path, err => {
             if (err) {
+                console.log(err);
                 return res.status(500).json({
                     ok: false,
                     mensaje: 'Error al mover el archivo',

@@ -12,7 +12,8 @@ var programaChema = new Schema({
     img: { type: String, required: false },
     potcast: { type: String, required: false },
     facebook: { type: String, required: false },
-    twitter: { type: String, required: false }
+    twitter: { type: String, required: false },
+    instagram: { type: String, required: false }
 }, { collection: 'programas' });
 programaChema.plugin(uniqueValidator, { message: 'El {PATH} debe de ser único' });
 

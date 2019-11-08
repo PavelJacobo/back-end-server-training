@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
     var limit = req.query.limit || 0;
     desde = Number(desde);
     limit = Number(limit);
-    Programa.find({}, 'nombre contenido fecha colaboradores img potcast facebook twitter')
+    Programa.find({}, 'nombre contenido fecha colaboradores img potcast facebook twitter instagram')
         .skip(desde)
         .limit(limit)
         .exec(
@@ -130,7 +130,7 @@ app.put('/:id', mdAutenticacion.verifaToken, (req, res) => {
                 errors: { message: 'No existe un programa con ese ID' }
             });
         }
-
+        console.log(programa)
         programa.nombre = body.nombre;
         programa.contenido = body.contenido;
         programa.colaboradores = body.colaboradores;
@@ -139,6 +139,7 @@ app.put('/:id', mdAutenticacion.verifaToken, (req, res) => {
         programa.potcast = body.potcast;
         programa.facebook = body.facebook;
         programa.twitter = body.twitter;
+        programa.instagram = body.instagram;
         programa.save((err, programaGuardado) => {
             if (err) {
                 return res.status(400).json({
@@ -173,7 +174,8 @@ app.post('/', mdAutenticacion.verifaToken, (req, res) => {
         img: body.img,
         potcast: body.potcast,
         facebook: body.facebook,
-        twitter: body.twitter
+        twitter: body.twitter,
+        instagram: body.instagram
     });
 
     programa.save((err, programaGuardado) => {
