@@ -10,6 +10,9 @@ var programaChema = new Schema({
     fecha: { type: Array, required: false },
     colaboradores: [{ type: Schema.Types.ObjectId, ref: 'Usuario' }],
     img: { type: String, required: false },
+    potcast: { type: String, required: false },
+    facebook: { type: String, required: false },
+    twitter: { type: String, required: false }
 }, { collection: 'programas' });
 programaChema.plugin(uniqueValidator, { message: 'El {PATH} debe de ser único' });
 

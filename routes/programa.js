@@ -10,11 +10,12 @@ const Programa = require('../models/programa');
 app.get('/', (req, res) => {
 
     var desde = req.query.desde || 0;
+    var limit = req.query.limit || 0;
     desde = Number(desde);
-
-    Programa.find({}, 'nombre contenido fecha colaboradores img')
+    limit = Number(limit);
+    Programa.find({}, 'nombre contenido fecha colaboradores img potcast facebook twitter')
         .skip(desde)
-        .limit()
+        .limit(limit)
         .exec(
             (err, programas) => {
                 if (err) {
@@ -135,6 +136,9 @@ app.put('/:id', mdAutenticacion.verifaToken, (req, res) => {
         programa.colaboradores = body.colaboradores;
         programa.img = body.img;
         programa.fecha = body.fecha;
+        programa.potcast = body.potcast;
+        programa.facebook = body.facebook;
+        programa.twitter = body.twitter;
         programa.save((err, programaGuardado) => {
             if (err) {
                 return res.status(400).json({
@@ -156,21 +160,25 @@ app.put('/:id', mdAutenticacion.verifaToken, (req, res) => {
 //  Crear un nuevo programa
 //==============================
 
-app.post('/', (req, res) => {
+app.post('/', mdAutenticacion.verifaToken, (req, res) => {
 
     var body = req.body;
+    console.log(body);
 
     var programa = new Programa({
         nombre: body.nombre,
         contenido: body.contenido,
         colaboradores: body.colaboradores,
         fecha: body.fecha,
-        img: body.img
+        img: body.img,
+        potcast: body.potcast,
+        facebook: body.facebook,
+        twitter: body.twitter
     });
 
     programa.save((err, programaGuardado) => {
         if (err) {
-            return res.status(400).json({
+            res.status(400).json({
                 ok: false,
                 mensaje: 'Error al crear programa',
                 errors: err
@@ -210,6 +218,23 @@ app.delete('/:id', mdAutenticacion.verifaToken, (req, res) => {
             ok: true,
             programa: programaBorrado
         });
+    });
+
+});
+
+
+//==============================
+//  Borra un usuario de un programa
+//==============================
+
+app.post('/user/:id', (req, res) => {
+
+    var body = req.body;
+    console.log(body);
+    Programa.updateMany({}, { $pull: { colaboradores: body.userID } }, {safe: true, upsert: true}, (err, res) => {
+        console.log(err);
+        console.log(res, 'RESPUESTA ');
+
     });
 
 });

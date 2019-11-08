@@ -192,11 +192,11 @@ function subirPorTipo(tipocoleccion, id, nombreArchivo, res) {
 
 }
 
-
+// subir por primera vez la imagen
 app.post('/imagen', (req, res, next) => {
 
     let tipo = req.query['tipo'];
-    // console.log(req.files);
+    console.log(req.files);
     if (!req.files) {
         res.status(400).json({
             ok: false,
@@ -211,7 +211,7 @@ app.post('/imagen', (req, res, next) => {
     extensionArchivo = splitDeArchivo[splitDeArchivo.length - 1];
     console.log('Extensión del archivo', extensionArchivo);
     // Solo aceptamos éstas extensiones
-    var extensionesValidas = ['png', 'jpeg', 'jpg', 'gif'];
+    var extensionesValidas = ['png', 'jpeg', 'jpg', 'gif', 'pdf', 'PNG', 'JPEG', 'JPG', 'GIF', 'PDF'];
 
     if (extensionesValidas.indexOf(extensionArchivo) < 0) {
         res.status(400).json({
@@ -222,7 +222,20 @@ app.post('/imagen', (req, res, next) => {
     }
 
     //nombre personalizado del archivo
-    var nombreArchivo = `${ new Date().getMilliseconds() }.${extensionArchivo}`;
+    var nombreArchivo = `${ new Date().getMilliseconds() }.${ extensionArchivo }`;
+
+    // nombre si es pdf
+
+    if (extensionArchivo === 'pdf') {
+        if (req.files.desde && req.files.hasta) {
+            // var inicioagenda = req.files.desde.name.toLowerCase().replace(/ /g,'').trim();
+            // var finagenda = req.files.hasta.name.toLowerCase().replace(/ /g,'').trim();
+            const inicioagenda = getDateFormat(req.files.desde.name);
+            const finagenda = getDateFormat(req.files.hasta.name);
+            nombreArchivo = `redonda.${inicioagenda}_${finagenda}.${ extensionArchivo }`;
+        }
+        
+    }
 
     // mover el archivo del temporal a un path
     var path = `./uploads/${tipo}/${ nombreArchivo }`;
@@ -245,6 +258,23 @@ app.post('/imagen', (req, res, next) => {
     });
 
 });
+
+function getDateFormat(datestring) {
+    console.log(datestring);
+    var date = new Date(datestring);
+    console.log(date)
+    const year = date.getFullYear().toString();
+    let month = (date.getMonth() + 1).toString();
+    let day = date.getDate().toString();
+    (day.length == 1) && (day = '0' + day);
+    (month.length == 1) && (month = '0' + month);
+
+    console.log(year);
+    console.log(month);
+    console.log(day);
+    var dateformat = year + month + day;
+    return dateformat;
+}
 
 
 module.exports = app;

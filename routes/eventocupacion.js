@@ -9,11 +9,14 @@ const Evento = require('../models/evento');
 app.get('/', (req, res) => {
 
     var desde = req.query.desde || 0;
+    var limit = req.query.limit || 0;
     desde = Number(desde);
-
+    limit = Number(limit);
+    console.log('Desde', desde);
+    console.log('LIMIT', limit);
     Evento.find({})
         .skip(desde)
-        .limit()
+        .limit(limit)
         .exec(
             (err, eventos) => {
                 if (err) {
@@ -94,6 +97,10 @@ app.post('/', (req, res) => {
         });
     });
 });
+
+// =================================
+//  Actualizar Evento
+// =================================
 
 app.put('/:id', (req, res) => {
     const body = req.body;
