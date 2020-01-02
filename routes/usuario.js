@@ -228,9 +228,9 @@ app.put('/addprograma/:id', [mdAutenticacion.verifaToken, mdAutenticacion.verifi
 //==============================
 //  Crear un nuevo usuario
 //==============================
-
-app.post('/', [mdAutenticacion.verifaToken, mdAutenticacion.verificaAdmin], (req, res) => {
-
+// , [mdAutenticacion.verifaToken, mdAutenticacion.verificaAdmin]
+app.post('/',[mdAutenticacion.verifaToken, mdAutenticacion.verificaAdmin], (req, res) => {
+    console.log(req.query, 'REQUEST QUERY?')
     var body = req.body;
 
     var usuario = new Usuario({

@@ -13,7 +13,7 @@ app.get('/', (req, res) => {
     var limit = req.query.limit || 0;
     desde = Number(desde);
     limit = Number(limit);
-    Programa.find({}, 'nombre contenido fecha colaboradores img potcast facebook twitter instagram')
+    Programa.find({}, 'nombre contenido fecha colaboradores img podcast facebook twitter instagram')
         .skip(desde)
         .limit(limit)
         .exec(
@@ -136,7 +136,7 @@ app.put('/:id', mdAutenticacion.verifaToken, (req, res) => {
         programa.colaboradores = body.colaboradores;
         programa.img = body.img;
         programa.fecha = body.fecha;
-        programa.potcast = body.potcast;
+        programa.podcast = body.podcast;
         programa.facebook = body.facebook;
         programa.twitter = body.twitter;
         programa.instagram = body.instagram;
@@ -172,7 +172,7 @@ app.post('/', mdAutenticacion.verifaToken, (req, res) => {
         colaboradores: body.colaboradores,
         fecha: body.fecha,
         img: body.img,
-        potcast: body.potcast,
+        podcast: body.podcast,
         facebook: body.facebook,
         twitter: body.twitter,
         instagram: body.instagram
