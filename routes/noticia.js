@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var Noticia = require('../models/noticia');
+const mdAutenticacion = require('../middlewares/autenticacion');
 
 
 // Get Noticia
@@ -112,7 +113,7 @@ app.get('/user/:id', (req, res, next) => {
 
 // Crear noticia
 
-app.post('/', (req, res) => {
+app.post('/', mdAutenticacion.verifaToken, (req, res) => {
     const body = req.body;
     console.log('BODY', body)
     const noticia = new Noticia({
@@ -144,7 +145,7 @@ app.post('/', (req, res) => {
 
 // Actualizar Noticia por Id
 
-app.put('/:id', (req, res) => {
+app.put('/:id', mdAutenticacion.verifaToken, (req, res) => {
     let id = req.params.id;
     console.log('ID', id);
     let body = req.body;
@@ -176,7 +177,7 @@ app.put('/:id', (req, res) => {
 
 // ELiminar una noticia por id
 
-app.delete('/:id', (req, res, next) => {
+app.delete('/:id', mdAutenticacion.verifaToken, (req, res, next) => {
     let id = req.params.id;
     Noticia.findByIdAndRemove(id, (err, noticiaBorrada) => {
         if (err) {

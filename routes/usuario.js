@@ -12,7 +12,6 @@ app.get('/', (req, res) => {
 
     var desde = req.query.desde || 0;
     desde = Number(desde);
-    console.log(req.query.desde);
     Usuario.find({}, 'nombre email img role programas')
         .populate('programas')
         .skip(desde)
@@ -66,9 +65,8 @@ app.get('/', (req, res) => {
 //  Obtener usuario por ID
 //==============================
 
-app.get('/:id', mdAutenticacion.verifaToken, (req, res) => {
+app.get('/:id', (req, res) => {
     const id = req.params.id;
-    console.log(id);
     Usuario.findById(id).exec((err, usuario) => {
         if (err) {
             return res.status(500).json({
@@ -111,7 +109,6 @@ app.put('/:id', [mdAutenticacion.verifaToken, mdAutenticacion.verificaAdminOUser
 
     var id = req.params.id;
     var body = req.body;
-    console.log(body);
 
     Usuario.findById(id)
         .populate('programas', 'nombre')
@@ -180,8 +177,6 @@ app.put('/addprograma/:id', [mdAutenticacion.verifaToken, mdAutenticacion.verifi
     var id = req.params.id;
     var body = req.body;
 
-    console.log(id, 'y', body);
-
     Usuario.findById(id)
         .exec((err, usuario) => {
 
@@ -230,7 +225,6 @@ app.put('/addprograma/:id', [mdAutenticacion.verifaToken, mdAutenticacion.verifi
 //==============================
 // , [mdAutenticacion.verifaToken, mdAutenticacion.verificaAdmin]
 app.post('/',[mdAutenticacion.verifaToken, mdAutenticacion.verificaAdmin], (req, res) => {
-    console.log(req.query, 'REQUEST QUERY?')
     var body = req.body;
 
     var usuario = new Usuario({

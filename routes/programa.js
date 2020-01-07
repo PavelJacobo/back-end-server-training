@@ -229,7 +229,7 @@ app.delete('/:id', mdAutenticacion.verifaToken, (req, res) => {
 //  Borra un usuario de un programa
 //==============================
 
-app.post('/user/:id', (req, res) => {
+app.post('/user/:id', mdAutenticacion.verifaToken, (req, res) => {
 
     var body = req.body;
     console.log(body);
